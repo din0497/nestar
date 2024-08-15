@@ -9,7 +9,7 @@
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "start": "nest start",
-    "train":"nest start train --watch",
+    "train":"ts-node train --watch",
     "start:dev": "nest start --watch",
     "start:dev:batch": "nest start nestar-batch --watch",
     "start:debug": "nest start --debug --watch",
