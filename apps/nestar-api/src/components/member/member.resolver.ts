@@ -6,7 +6,7 @@ import { Member } from '../../libs/dto/member/member';
 
 @Resolver()
 export class MemberResolver {
-	constructor(private readonly memberService: MemberService) {}
+	constructor(private readonly memberService: MemberService) { }
 
 	@Mutation(() => Member)
 	@UsePipes(ValidationPipe)
@@ -20,12 +20,17 @@ export class MemberResolver {
 		}
 	}
 
-	@Mutation(() => String)
+	@Mutation(() => Member)
 	@UsePipes(ValidationPipe)
-	public async login(@Args('input') input: LoginInput): Promise<string> {
-		console.log('Mutation: login');
-		console.log('log', input);
-		return this.memberService.login();
+	public async login(@Args('input') input: LoginInput): Promise<Member> {
+
+		try {
+			console.log('Mutation: login');
+			console.log('login', input);
+			return this.memberService.login(input);
+		} catch (err) {
+			throw new IntersectionObserver(err);
+		}
 	}
 
 	@Mutation(() => String)
