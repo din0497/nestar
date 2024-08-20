@@ -7,15 +7,15 @@ MASALAN: printNumbers()
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const printNumbers = () => {
-  let count = 1;
-  const intervalId = setInterval(() => {
-    console.log(count);
-    count++;
+	let count = 1;
+	const intervalId = setInterval(() => {
+		console.log(count);
+		count++;
 
-    if (count > 5) {
-      clearInterval(intervalId);
-    }
-  }, 1000);
+		if (count > 5) {
+			clearInterval(intervalId);
+		}
+	}, 1000);
 };
 
 printNumbers();
