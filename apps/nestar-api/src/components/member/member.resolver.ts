@@ -1,6 +1,6 @@
 import { Args, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { MemberService } from './member.service';
-import { UsePipes, ValidationPipe } from '@nestjs/common';
+import { InternalServerErrorException, UsePipes, ValidationPipe } from '@nestjs/common';
 import { LoginInput, MemberInput } from '../../libs/dto/member/member.input';
 import { Member } from '../../libs/dto/member/member';
 
@@ -16,20 +16,20 @@ export class MemberResolver {
 			console.log('DTO', input);
 			return this.memberService.signup(input);
 		} catch (err) {
-			throw new IntersectionObserver(err);
+			throw new InternalServerErrorException(err);
 		}
 	}
 
 	@Mutation(() => Member)
 	@UsePipes(ValidationPipe)
-	public async login(@Args('input') input: LoginInput): Promise<Member> {
+	public async login(@Args('data') input: LoginInput): Promise<Member> {
 
 		try {
 			console.log('Mutation: login');
 			console.log('login', input);
 			return this.memberService.login(input);
 		} catch (err) {
-			throw new IntersectionObserver(err);
+			throw new InternalServerErrorException(err);
 		}
 	}
 
