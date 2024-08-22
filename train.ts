@@ -8,7 +8,7 @@ MASALAN: stringToKebab(“I love Kebab”) return “i-love-kebab”
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 const stringToKebab = (str) => {
-	return str.toLowerCase().split(" ").join('-')
-}
+	return str.toLowerCase().split(' ').join('-');
+};
 
 console.log(stringToKebab('I love Kebab'));

@@ -6,29 +6,20 @@ import { Member } from '../../libs/dto/member/member';
 
 @Resolver()
 export class MemberResolver {
-	constructor(private readonly memberService: MemberService) { }
+	constructor(private readonly memberService: MemberService) {}
 
 	@Mutation(() => Member)
 	public async signup(@Args('input') input: MemberInput): Promise<Member> {
-		try {
-			console.log('Mutation: sigup');
-			console.log('DTO', input);
-			return this.memberService.signup(input);
-		} catch (err) {
-			throw new InternalServerErrorException(err);
-		}
+		console.log('Mutation: signup');
+		console.log('DTO', input);
+		return this.memberService.signup(input);
 	}
 
 	@Mutation(() => Member)
 	public async login(@Args('data') input: LoginInput): Promise<Member> {
-
-		try {
-			console.log('Mutation: login');
-			console.log('login', input);
-			return this.memberService.login(input);
-		} catch (err) {
-			throw new InternalServerErrorException(err);
-		}
+		console.log('Mutation: login');
+		console.log('login', input);
+		return this.memberService.login(input);
 	}
 
 	@Mutation(() => String)
