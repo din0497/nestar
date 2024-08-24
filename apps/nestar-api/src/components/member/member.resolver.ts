@@ -11,7 +11,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 
 @Resolver()
 export class MemberResolver {
-	constructor(private readonly memberService: MemberService) { }
+	constructor(private readonly memberService: MemberService) {}
 
 	@Mutation(() => Member)
 	public async signup(@Args('input') input: MemberInput): Promise<Member> {
@@ -33,7 +33,6 @@ export class MemberResolver {
 		console.log(typeof memberId);
 		console.log(memberId);
 
-
 		return this.memberService.updateMember();
 	}
 
@@ -41,16 +40,14 @@ export class MemberResolver {
 	@Query(() => String)
 	public async checkAuth(@AuthMember('memberNick') memberNick: string): Promise<string> {
 		console.log('Query: checkAuth');
-		return memberNick
-
+		return memberNick;
 	}
 	@Roles(MemberType.USER, MemberType.AGENT)
 	@UseGuards(RolesGuard)
 	@Query(() => String)
 	public async checkAuthRoles(@AuthMember() authMember: Member): Promise<string> {
 		console.log('Query: checkAuth');
-		return`Hi ${authMember.memberNick}, you are ${authMember.memberType} (memberId: ${authMember._id})`
-
+		return `Hi ${authMember.memberNick}, you are ${authMember.memberType} (memberId: ${authMember._id})`;
 	}
 
 	@Query(() => String)
@@ -65,20 +62,13 @@ export class MemberResolver {
 	@UseGuards(RolesGuard)
 	@Mutation(() => String)
 	public async getAllMembersByAdmin(): Promise<string> {
-		
-		
-		return this.memberService.getAllMembersByAdmin()
-
+		return this.memberService.getAllMembersByAdmin();
 	}
 
 	// Authorization: ADMIN
 	@Mutation(() => String)
 	public async updateMemberByAdmin(): Promise<string> {
 		console.log('Mutation: updateMemberByAdmin');
-		return this.memberService.updateMemberByAdmin()
-
+		return this.memberService.updateMemberByAdmin();
 	}
 }
-
-
-

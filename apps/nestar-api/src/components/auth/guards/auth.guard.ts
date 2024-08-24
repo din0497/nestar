@@ -4,7 +4,7 @@ import { Message } from 'apps/nestar-api/src/libs/enums/common.enum';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-	constructor(private authService: AuthService) { }
+	constructor(private authService: AuthService) {}
 
 	async canActivate(context: ExecutionContext | any): Promise<boolean> {
 		console.info('--- @guard() Authentication [AuthGuard] ---');
@@ -14,7 +14,6 @@ export class AuthGuard implements CanActivate {
 
 			const bearerToken = request.headers.authorization;
 			if (!bearerToken) throw new BadRequestException(Message.TOKEN_NOT_EXIST);
-			
 
 			const token = bearerToken.split(' ')[1],
 				authMember = await this.authService.verifyToken(token);

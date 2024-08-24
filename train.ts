@@ -1,8 +1,8 @@
 /* 
-ZM-TASK:
+ZN-TASK:
 
-Shunday function yozing, u function parametrga berilgan raqamlarni orqasiga ogirib qaytarsin.
-MASALAN: reverseInteger(123456789) return 987654321
+Shunday function yozing, uni array va number parametri bolsin. Ikkinchi parametrda berilgan raqamli indexgacha arrayni orqasiga ogirib qaytarsin.
+MASALAN: rotateArray([1, 2, 3, 4, 5, 6], 3) return [5, 6, 1, 2, 3, 4]
 
 
 */
@@ -11,14 +11,9 @@ import { log } from 'console';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
-const reverseInteger = (num) => {
-	let reversedNum = 0;
-	while (num != 0) {
-		let digit = num % 10;
-		reversedNum = reversedNum * 10 + digit;
-		num = Math.floor(num / 10);
-	}
-	return reversedNum;
+const rotateArray = (arr: number[], index: number): number[] => {
+	const slice = arr.splice(0, index + 1);
+	return [...arr, ...slice];
 };
 
-log(reverseInteger(123456789));
+log(rotateArray([1, 2, 3, 4, 5, 6], 3));
