@@ -9,13 +9,16 @@ import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class MemberService {
-	constructor(@InjectModel('Member') private readonly memberModel: Model<Member>,
-		private authService: AuthService
-	) { }
+	constructor(
+		@InjectModel('Member') private readonly memberModel: Model<Member>,
+		private authService: AuthService,
+	) {}
 	public async signup(input: MemberInput): Promise<Member> {
-		input.memberPassword = await this.authService.hashPassword(input.memberPassword)
+		input.memberPassword = await this.authService.hashPassword(input.memberPassword);
 		try {
 			const result = await this.memberModel.create(input);
+			result.accessToken = await this.authService.createToken(result);
+
 			return result;
 		} catch (err) {
 			console.log('Error, Service.model', err.message);
@@ -36,14 +39,11 @@ export class MemberService {
 			throw new InternalServerErrorException(Message.BLOCKED_USER);
 		}
 
-		// TODO: Compare passwords
-
-
 		const isMatch = await this.authService.comparePasswords(memberPassword, response.memberPassword);
-
 		if (!isMatch) {
 			throw new InternalServerErrorException(Message.WRONG_PASSWORD);
 		}
+		response.accessToken = await this.authService.createToken(response);
 
 		return response;
 	}
