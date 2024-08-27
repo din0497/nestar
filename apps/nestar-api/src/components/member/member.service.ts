@@ -7,13 +7,14 @@ import { MemberStatus } from '../../libs/enums/member.enum';
 import { Message } from '../../libs/enums/common.enum';
 import { AuthService } from '../auth/auth.service';
 import { MemberUpdate } from '../../libs/dto/member/member.update';
+import { T } from '../../libs/types/common';
 
 @Injectable()
 export class MemberService {
 	constructor(
 		@InjectModel('Member') private readonly memberModel: Model<Member>,
 		private authService: AuthService,
-	) {}
+	) { }
 	public async signup(input: MemberInput): Promise<Member> {
 		input.memberPassword = await this.authService.hashPassword(input.memberPassword);
 		try {
@@ -55,13 +56,23 @@ export class MemberService {
 			input,
 			{ new: true },
 		).exec();
-		if(!result) throw new InternalServerErrorException(Message.UPDATE_FAILED);
+		if (!result) throw new InternalServerErrorException(Message.UPDATE_FAILED);
 		result.accessToken = await this.authService.createToken(result)
 		return result;
 	}
 
-	public async getMember(): Promise<string> {
-		return 'getMember executed!';
+	public async getMember(targetId: ObjectId): Promise<Member> {
+		const search: T = {
+			_id: targetId,
+			memberStatus: {
+				$in: [MemberStatus.ACTIVE, MemberStatus.BLOCK]
+			}
+		}
+
+		const targetMember = await this.memberModel.findOne(search).exec()
+		if (!targetMember) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
+		targetMember.accessToken = await this.authService.createToken(targetMember)
+		return targetMember;
 	}
 	public async getAllMembersByAdmin(): Promise<string> {
 		return 'getAllMembersByAdmin executed!';
