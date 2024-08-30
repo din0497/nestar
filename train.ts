@@ -1,8 +1,12 @@
 /* 
-ZO-TASK:
+ZP-TASK:
 
-Shunday function yozing, u parametrdagi string ichidagi qavslar miqdori balansda ekanligini aniqlasin. Ya'ni ochish("(") va yopish(")") qavslar soni bir xil bolishi kerak.
-MASALAN: areParenthesesBalanced("string()ichida(qavslar)soni()balansda") return true
+shunday function yozing, u 2 ta array parametr qabul qilsin. Siz bu ikki arrayning qiymatlari o'xshash bo'lishini (ya'ni, ularning barcha elementlari bir xil bo'lishini) tekshirishingiz kerak.
+
+MASALAN: 
+areArraysEqual([1, 2, 3], [3, 1, 2]) // true
+areArraysEqual([1, 2, 3], [3, 1, 2, 1]) // true
+areArraysEqual([1, 2, 3], [4, 1, 2]) // false
 
 
 */
@@ -11,17 +15,16 @@ import { log } from 'console';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
+const areArraysEqual = (arr1: number[], arr2: number[]): boolean => {
 
-const areParenthesesBalanced = (str: string): boolean => {
-	let balance = 0
-	for (const ele of str) {
-		if (ele === "(") {
-			balance++
-		} else if (ele === ")") {
-			balance--
+	for (const num of new Set(arr1)) {
+		if (!new Set(arr2).has(num)) {
+			return false
 		}
 	}
-	return balance === 0
+	return true
 }
 
-log(areParenthesesBalanced("string()ichida(qavslar)soni()balansda"));
+log(areArraysEqual([1, 2, 3], [3, 1, 2]));
+log(areArraysEqual([1, 2, 3], [3, 1, 2, 1]));
+log(areArraysEqual([1, 2, 3], [4, 1, 2]));
