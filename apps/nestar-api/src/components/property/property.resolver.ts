@@ -6,6 +6,8 @@ import { UseGuards } from '@nestjs/common';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { ObjectId } from 'mongoose';
 import { AuthMember } from '../auth/decorators/authMember.decorator';
+import { Property } from '../../libs/dto/property/property';
+import { PropertyInput } from '../../libs/dto/property/property.input';
 
 @Resolver()
 export class PropertyResolver {
