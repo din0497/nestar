@@ -6,8 +6,8 @@ import { UseGuards } from '@nestjs/common';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { ObjectId } from 'mongoose';
 import { AuthMember } from '../auth/decorators/authMember.decorator';
-import { Property } from '../../libs/dto/property/property';
-import { PropertyInput } from '../../libs/dto/property/property.input';
+import { Properties, Property } from '../../libs/dto/property/property';
+import { AgentPropertiesInquiry, PropertiesInquiry, PropertyInput } from '../../libs/dto/property/property.input';
 import { WithoutGuard } from '../auth/guards/without.guard';
 import { shapeIntoMongoObjId } from '../../libs/config';
 import { PropertyUpdate } from '../../libs/dto/property/property.update';
@@ -50,5 +50,26 @@ export class PropertyResolver {
         console.log("Mutation: updateProperty");
         input._id = shapeIntoMongoObjId(input._id);
         return await this.propertyService.updateProperty(memberId, input);
+    }
+
+    @UseGuards(WithoutGuard)
+    @Query((returns) => Properties)
+    public async getProperties(
+        @Args("input") input: PropertiesInquiry,
+        @AuthMember("_id") memberId: ObjectId,
+    ): Promise<Properties> {
+        console.log("getProperties");
+        return await this.propertyService.getProperties(memberId, input);
+    }
+
+    @Roles(MemberType.AGENT)
+    @UseGuards(RolesGuard)
+    @Query((returns) => Properties)
+    public async getAgentProperties(
+        @Args("input") input: AgentPropertiesInquiry,
+        @AuthMember("_id") memberId: ObjectId,
+    ): Promise<Properties> {
+        console.log("getProperties");
+        return await this.propertyService.getAgentProperties(memberId, input);
     }
 }
