@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { graphqlUploadExpress } from 'graphql-upload';
 import * as express from 'express';
-import { LoggingInterceptor } from './libs/interceptor//Logging.interceprot';
+import { LoggingInterceptor } from './libs/interceptor//Logging.interceptor';
 
 
 async function bootstrap() {

@@ -82,7 +82,10 @@ export class Property {
     @Field(() => Date)
     updatedAt: number;
 
+    /** from aggrigation**/
 
+    @Field(() => Member, { nullable: true })
+    memberData?: Member;
 }
 
 @ObjectType()
