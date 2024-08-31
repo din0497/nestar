@@ -7,7 +7,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { ObjectId } from 'mongoose';
 import { AuthMember } from '../auth/decorators/authMember.decorator';
 import { Properties, Property } from '../../libs/dto/property/property';
-import { AgentPropertiesInquiry, PropertiesInquiry, PropertyInput } from '../../libs/dto/property/property.input';
+import { AgentPropertiesInquiry, AllPropertiesInquiry, PropertiesInquiry, PropertyInput } from '../../libs/dto/property/property.input';
 import { WithoutGuard } from '../auth/guards/without.guard';
 import { shapeIntoMongoObjId } from '../../libs/config';
 import { PropertyUpdate } from '../../libs/dto/property/property.update';
@@ -72,4 +72,41 @@ export class PropertyResolver {
         console.log("getProperties");
         return await this.propertyService.getAgentProperties(memberId, input);
     }
+
+    /* ADMIN */
+
+    @Roles(MemberType.ADMIN)
+    @UseGuards(RolesGuard)
+    @Query((returns) => Properties)
+    public async getAllPropertiesByAdmin(
+        @Args("input") input: AllPropertiesInquiry,
+        @AuthMember("_id") memberId: ObjectId,
+    ): Promise<Properties> {
+        console.log("Query: getAllPropertiesByAdmin");
+        return await this.propertyService.getAllPropertiesByAdmin(input);
+    }
+
+    @Roles(MemberType.ADMIN)
+    @UseGuards(RolesGuard)
+    @Mutation((returns) => Property)
+    public async updatePropertyByAdmin(
+        @Args("input") input: PropertyUpdate,
+    ): Promise<Property> {
+        console.log("Query: updatePropertyByAdmin");
+        input._id = shapeIntoMongoObjId(input._id);
+        return await this.propertyService.updatePropertyByAdmin(input);
+    }
+
+    @Roles(MemberType.ADMIN)
+    @UseGuards(RolesGuard)
+    @Mutation((returns) => Property)
+    public async removePropertyByAdmin(
+        @Args("propertyId") input: string,
+    ): Promise<Property> {
+        console.log("Query: removePropertyByAdmin");
+        const propertyId = shapeIntoMongoObjId(input);
+        return await this.propertyService.removePropertyByAdmin(propertyId);
+    }
 }
+
+
