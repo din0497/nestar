@@ -67,4 +67,39 @@ export class BoardArticleResolver {
 
     // admin
 
+    @Roles(MemberType.ADMIN)
+    @UseGuards(RolesGuard)
+    @Query((returns) => BoardArticles)
+    public async getAllBoardArticlesByAdmin(
+        @Args('input') input: AllBoardArticlesInquiry,
+        @AuthMember('_id') memberId: ObjectId,
+    ): Promise<BoardArticles> {
+        console.log('Query: getAllBoardArticlesByAdmin ');
+        return await this.boardArticleService.getAllBoardArticlesbyAdmin(input);
+    }
+
+    @Roles(MemberType.ADMIN)
+    @UseGuards(RolesGuard)
+    @Mutation((returns) => BoardArticle)
+    public async updateBoardArticleByAdmin(
+        @Args('input') input: BoardArticleUpdate,
+        @AuthMember('_id') memberId: ObjectId,
+    ): Promise<BoardArticle> {
+        console.log('Query: getAllBoardArticlesByAdmin ');
+        input._id = shapeIntoMongoObjId(input._id);
+        return await this.boardArticleService.updateBoardArticlebyAdmin(input);
+    }
+
+    @Roles(MemberType.ADMIN)
+    @UseGuards(RolesGuard)
+    @Mutation((returns) => BoardArticle)
+    public async removeBoardArticleByAdmin(
+        @Args('articleId') input: string,
+        @AuthMember('_id') memberId: ObjectId,
+    ): Promise<BoardArticle> {
+        console.log('Query: getAllBoardArticlesByAdmin ');
+        const articleId = shapeIntoMongoObjId(input);
+        return await this.boardArticleService.removeBoardArticlebyAdmin(articleId);
+    }
+
 }
