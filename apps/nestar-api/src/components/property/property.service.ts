@@ -86,8 +86,10 @@ export class PropertyService {
             memberId: memberId,
             propertyStatus: PropertyStatus.ACTIVE,
         };
-        if (propertyStatus === PropertyStatus.SOLD) soldAt = moment().toDate();
-        else if ((propertyStatus = PropertyStatus.DELETE))
+        if (propertyStatus === PropertyStatus.SOLD) { soldAt = moment().toDate(); console.log(input); }
+
+
+        else if ((propertyStatus === PropertyStatus.DELETE))
             deletedAt = moment().toDate();
 
         const result = await this.propertyModel
