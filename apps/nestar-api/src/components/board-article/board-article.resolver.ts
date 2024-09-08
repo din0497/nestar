@@ -50,8 +50,8 @@ export class BoardArticleResolver {
     ): Promise<BoardArticle> {
         console.log('Mutation: updateBoardArticle');
         input._id = shapeIntoMongoObjId(input._id);
-        console.log({"input": input, 'memberId':memberId});
-        
+        console.log({ "input": input, 'memberId': memberId });
+
         return await this.boardArticleService.updateBoardArticle(memberId, input);
     }
     @UseGuards(WithoutGuard)
@@ -64,6 +64,16 @@ export class BoardArticleResolver {
         return await this.boardArticleService.getBoardArticles(memberId, input);
     }
 
+    @UseGuards(AuthGuard)
+    @Mutation(() => BoardArticle)
+    public async likeTargetBoardArticle(
+        @Args('articleId') input: string,
+        @AuthMember('_id') memberId: ObjectId,
+    ): Promise<BoardArticle> {
+        console.log('Mutation: likeTargetBoardArticle');
+        const likeRefId = shapeIntoMongoObjId(input)
+        return this.boardArticleService.likeTargetBoardArticle(memberId, likeRefId);
+    }
 
     // admin
 
