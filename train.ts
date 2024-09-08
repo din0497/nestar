@@ -1,8 +1,8 @@
 /* 
-ZR-TASK:
+ZS-TASK:
 
-Shunday function yozing, u parametridagi string ichidagi raqam va sonlarni sonini sanasin.
-MASALAN: countNumberAndLetters(“string152%\¥”) return {number:3, letter:6}
+Shunday function yozing, u parametridagi arrayni ichidagi 1 marta kelgan elemnetni qaytarsin.
+MASALAN: singleNumber([4, 2, 1, 2, 1]) return 4
 
 */
 
@@ -10,16 +10,21 @@ import { log } from 'console';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
-const countNumberAndLetters = (str: string): any => {
-	const result = { number: 0, letter: 0 };
-	for (const char of str) {
-		if (!isNaN(parseFloat(char)) && !/^[!@#$¥%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]+$/.test(char)) {
-			result.number++;
-		} else if (isNaN(parseFloat(char)) && !/^[!@#¥%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]+$/.test(char)) {
-			result.letter++;
+function singleNumber(arr) {
+	const numberFrequency = {};
+
+	arr.forEach(num => {
+		numberFrequency[num] = (numberFrequency[num] || 0) + 1;
+	});
+
+
+	for (let num in numberFrequency) {
+		if (numberFrequency[num] === 1) {
+			return Number(num); 
 		}
 	}
-	return result;
-};
 
-console.log(countNumberAndLetters('string152%¥'));
+	return null; 
+}
+
+console.log(singleNumber([4, 2, 1, 2, 1]));
