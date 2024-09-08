@@ -12,13 +12,17 @@ import { ViewService } from '../view/view.service';
 import { PropertyUpdate } from '../../libs/dto/property/property.update';
 import * as moment from 'moment';
 import { lookupMember, shapeIntoMongoObjId } from '../../libs/config';
+import { LikeInput } from '../../libs/dto/like/like.input';
+import { LikeGroup } from '../../libs/enums/like.enum';
+import { LikeService } from '../like/like.service';
 
 @Injectable()
 export class PropertyService {
     constructor(
         @InjectModel('Property') private readonly propertyModel: Model<Property>,
         private memberService: MemberService,
-        private viewService: ViewService,) { }
+        private viewService: ViewService, private likeService: LikeService) { }
+
     public async createProperty(input: PropertyInput): Promise<Property> {
         try {
             const result = await this.propertyModel.create(input);
@@ -235,6 +239,36 @@ export class PropertyService {
                 return { [ele]: true };
             });
         }
+    }
+
+    public async likeTargetProperty(
+        memebrId: ObjectId,
+        likeRefId: ObjectId,
+    ): Promise<Property> {
+        console.log(memebrId, likeRefId);
+        
+        const target: Property = await this.propertyModel
+            .findOne({ _id: likeRefId, propertyStatus: PropertyStatus.ACTIVE })
+            .exec();
+        if (!target) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
+
+        const input: LikeInput = {
+            memberId: memebrId,
+            likeRefId: likeRefId,
+            likeGroup: LikeGroup.PROPERTY,
+        };
+
+        //Like toogle
+        const modifier: number = await this.likeService.toggleLike(input);
+        const result = await this.propertyStatsEditor({
+            _id: likeRefId,
+            targetKey: "propertyLikes",
+            modifier: modifier,
+        });
+
+        if (!result)
+            throw new InternalServerErrorException(Message.SOMETHING_WENT_WRONG);
+        return result;
     }
 
 
