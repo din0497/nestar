@@ -14,7 +14,7 @@ export const availablePropertySorts = [
 ];
 
 export const availableBoardArticles = ['createdAt', 'updatedAt', 'articleLikes', 'articleViews'];
-export const availableCommentSorts = ["createdAt", "updatedAt"];
+export const availableCommentSorts = ['createdAt', 'updatedAt'];
 // IMAGE CONFIGURATION (config.js)
 import { v4 as uuidv4 } from 'uuid';
 import * as path from 'path';
@@ -25,25 +25,24 @@ export const getSerialForImage = (filename: string) => {
 	return uuidv4() + ext;
 };
 
-
 export const shapeIntoMongoObjId = (target: any) => {
 	return typeof target === 'string' ? new ObjectId(target) : target;
 };
 
 export const lookupMember = {
 	$lookup: {
-		from: "members",
-		localField: "memberId",
-		foreignField: "_id",
-		as: "memberData",
+		from: 'members',
+		localField: 'memberId',
+		foreignField: '_id',
+		as: 'memberData',
 	},
 };
 
 export const lookupFavorite = {
 	$lookup: {
-		from: "members",
-		localField: "favoriteProperty.memberId",
-		foreignField: "_id",
-		as: "favoriteProperty.memberData",
+		from: 'members',
+		localField: 'favoriteProperty.memberId',
+		foreignField: '_id',
+		as: 'favoriteProperty.memberData',
 	},
 };

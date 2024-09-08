@@ -9,8 +9,14 @@ import { MemberModule } from '../member/member.module';
 import { LikeModule } from '../like/like.module';
 
 @Module({
-    imports: [MongooseModule.forFeature([{ name: 'Property', schema: PropertySchema }]), AuthModule, ViewModule, MemberModule, LikeModule],
-    providers: [PropertyService, PropertyResolver],
-    exports:[PropertyService]
+	imports: [
+		MongooseModule.forFeature([{ name: 'Property', schema: PropertySchema }]),
+		AuthModule,
+		ViewModule,
+		MemberModule,
+		LikeModule,
+	],
+	providers: [PropertyService, PropertyResolver],
+	exports: [PropertyService],
 })
-export class PropertyModule { }
+export class PropertyModule {}

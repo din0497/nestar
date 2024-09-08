@@ -22,7 +22,7 @@ export class MemberService {
 		private authService: AuthService,
 		private viewService: ViewService,
 		private likeService: LikeService,
-	) { }
+	) {}
 	public async signup(input: MemberInput): Promise<Member> {
 		input.memberPassword = await this.authService.hashPassword(input.memberPassword);
 		try {
@@ -94,6 +94,10 @@ export class MemberService {
 			}
 
 			//meLiked
+			const likeInput = { memberId: memberId, likeRefId: targetId, likeGroup: LikeGroup.MEMBER };
+			console.log(likeInput);
+
+			targetMember.meLiked = await this.likeService.checkLikeExistence(likeInput);
 			//meFollowed
 		}
 		return targetMember;
@@ -122,13 +126,8 @@ export class MemberService {
 		return result[0];
 	}
 
-	public async likeTargetMember(
-		memebrId: ObjectId,
-		likeRefId: ObjectId,
-	): Promise<Member> {
-		const target: Member = await this.memberModel
-			.findOne({ _id: likeRefId, memberStatus: MemberStatus.ACTIVE })
-			.exec();
+	public async likeTargetMember(memebrId: ObjectId, likeRefId: ObjectId): Promise<Member> {
+		const target: Member = await this.memberModel.findOne({ _id: likeRefId, memberStatus: MemberStatus.ACTIVE }).exec();
 		if (!target) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
 
 		const input: LikeInput = {
@@ -141,17 +140,13 @@ export class MemberService {
 		const modifier: number = await this.likeService.toggleLike(input);
 		const result = await this.memberStatsEditor({
 			_id: likeRefId,
-			targetKey: "memberLikes",
+			targetKey: 'memberLikes',
 			modifier: modifier,
 		});
 
-		if (!result)
-			throw new InternalServerErrorException(Message.SOMETHING_WENT_WRONG);
+		if (!result) throw new InternalServerErrorException(Message.SOMETHING_WENT_WRONG);
 		return result;
 	}
-
-
-
 
 	public async getAllMembersByAdmin(input: MembersInquiry): Promise<Members> {
 		const { memberStatus, memberType, text } = input.search;
@@ -200,14 +195,8 @@ export class MemberService {
 	}
 
 	public async memberStatsEditor(input: StatisticModifier): Promise<Member> {
-		console.log("executed!");
+		console.log('executed!');
 		const { _id, targetKey, modifier } = input;
-		return await this.memberModel
-			.findByIdAndUpdate(
-				_id,
-				{ $inc: { [targetKey]: modifier } },
-				{ new: true },
-			)
-			.exec();
+		return await this.memberModel.findByIdAndUpdate(_id, { $inc: { [targetKey]: modifier } }, { new: true }).exec();
 	}
 }

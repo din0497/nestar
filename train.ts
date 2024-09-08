@@ -11,15 +11,15 @@ import { log } from 'console';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 const countNumberAndLetters = (str: string): any => {
-	const result = { number: 0, letter: 0 }
+	const result = { number: 0, letter: 0 };
 	for (const char of str) {
 		if (!isNaN(parseFloat(char)) && !/^[!@#$¥%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]+$/.test(char)) {
-			result.number++
+			result.number++;
 		} else if (isNaN(parseFloat(char)) && !/^[!@#¥%^&*()_+\-=\[\]{};':"\\|,.<>\/?`~]+$/.test(char)) {
-			result.letter++
+			result.letter++;
 		}
 	}
-	return result
-}
+	return result;
+};
 
-console.log(countNumberAndLetters("string152%\¥"));
+console.log(countNumberAndLetters('string152%¥'));
