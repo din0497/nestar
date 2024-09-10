@@ -56,8 +56,7 @@ export class BoardArticleService {
         };
 
         const targetBoardArticle: BoardArticle = await this.boardArticleModel.findOne(search).lean().exec();
-        console.log("@@Target", targetBoardArticle);
-
+       
         if (!targetBoardArticle) {
             throw new InternalServerErrorException(Message.NO_DATA_FOUND);
         }
