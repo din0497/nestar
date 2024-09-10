@@ -28,7 +28,7 @@ export class PropertyService {
 		private memberService: MemberService,
 		private viewService: ViewService,
 		private likeService: LikeService,
-	) { }
+	) {}
 
 	public async createProperty(input: PropertyInput): Promise<Property> {
 		try {
@@ -112,7 +112,7 @@ export class PropertyService {
 		const sort: T = {
 			[input?.sort ?? 'createdAt']: input?.direction ?? Direction.DESC,
 		};
-console.log("@@@member", memberId);
+		console.log('@@@member', memberId);
 
 		this.shapeMatchQuery(match, input);
 		console.log('match:', match);

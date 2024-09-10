@@ -15,6 +15,7 @@ import { LikeInput } from '../../libs/dto/like/like.input';
 import { LikeGroup } from '../../libs/enums/like.enum';
 import { LikeService } from '../like/like.service';
 import { Follower, Following, MeFollowed } from '../../libs/dto/follow/follow';
+import { lookupAuthMemberLiked } from '../../libs/config';
 
 @Injectable()
 export class MemberService {
@@ -24,7 +25,7 @@ export class MemberService {
 		private authService: AuthService,
 		private viewService: ViewService,
 		private likeService: LikeService,
-	) { }
+	) {}
 	public async signup(input: MemberInput): Promise<Member> {
 		input.memberPassword = await this.authService.hashPassword(input.memberPassword);
 		try {
@@ -101,32 +102,24 @@ export class MemberService {
 
 			targetMember.meLiked = await this.likeService.checkLikeExistence(likeInput);
 			//meFollowed
-			targetMember.meFollowed = await this.checkSubscription(memberId, targetId)
+			targetMember.meFollowed = await this.checkSubscription(memberId, targetId);
 		}
 		return targetMember;
 	}
 
-	private async checkSubscription(
-		followerId: ObjectId,
-		followingId: ObjectId,
-	): Promise<MeFollowed[]> {
-		
-		const result = await this.followModel
-			.findOne({ followingId: followingId, followerId: followerId })
-			.exec();
-			
+	private async checkSubscription(followerId: ObjectId, followingId: ObjectId): Promise<MeFollowed[]> {
+		const result = await this.followModel.findOne({ followingId: followingId, followerId: followerId }).exec();
+
 		return result
 			? [
-				{
-					followerId: followerId,
-					followingId: followingId,
-					myFollowing: true,
-				},
-			]
+					{
+						followerId: followerId,
+						followingId: followingId,
+						myFollowing: true,
+					},
+				]
 			: [];
 	}
-
-
 
 	public async getAgents(memberId: ObjectId, input: AgentsInquiry): Promise<Members> {
 		const { text } = input.search;
@@ -135,14 +128,17 @@ export class MemberService {
 
 		if (text) match.memberNick = { $regex: new RegExp(text, 'i') };
 
-		console.log('match', match);
 
 		const result = await this.memberModel.aggregate([
 			{ $match: match },
 			{ $sort: sort },
 			{
 				$facet: {
-					list: [{ $skip: (input.page - 1) * input.limit }, { $limit: input.limit }],
+					list: [
+						{ $skip: (input.page - 1) * input.limit },
+						{ $limit: input.limit },
+						lookupAuthMemberLiked(memberId),
+					],
 					metaCounter: [{ $count: 'total' }],
 				},
 			},

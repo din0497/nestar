@@ -81,8 +81,8 @@ export class MemberResolver {
 	): Promise<Member> {
 		console.log('Mutation: likeTargetMember');
 		const likeRefId = shapeIntoMongoObjId(input);
-		console.log("@@ids", memberId, likeRefId);
-		
+		console.log('@@ids', memberId, likeRefId);
+
 		return this.memberService.likeTargetMember(memberId, likeRefId);
 	}
 
