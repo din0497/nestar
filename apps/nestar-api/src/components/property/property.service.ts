@@ -16,7 +16,7 @@ import { ViewGroup } from '../../libs/enums/view.enum';
 import { ViewService } from '../view/view.service';
 import { PropertyUpdate } from '../../libs/dto/property/property.update';
 import * as moment from 'moment';
-import { lookupMember, shapeIntoMongoObjId } from '../../libs/config';
+import { lookupAuthMemberLiked, lookupMember, shapeIntoMongoObjId } from '../../libs/config';
 import { LikeInput } from '../../libs/dto/like/like.input';
 import { LikeGroup } from '../../libs/enums/like.enum';
 import { LikeService } from '../like/like.service';
@@ -28,7 +28,7 @@ export class PropertyService {
 		private memberService: MemberService,
 		private viewService: ViewService,
 		private likeService: LikeService,
-	) {}
+	) { }
 
 	public async createProperty(input: PropertyInput): Promise<Property> {
 		try {
@@ -112,6 +112,7 @@ export class PropertyService {
 		const sort: T = {
 			[input?.sort ?? 'createdAt']: input?.direction ?? Direction.DESC,
 		};
+console.log("@@@member", memberId);
 
 		this.shapeMatchQuery(match, input);
 		console.log('match:', match);
@@ -125,6 +126,7 @@ export class PropertyService {
 						list: [
 							{ $skip: (input.page - 1) * input.limit },
 							{ $limit: input.limit },
+							lookupAuthMemberLiked(memberId),
 							lookupMember,
 							{ $unwind: '$memberData' },
 						],
