@@ -13,18 +13,17 @@ import { log } from 'console';
 function singleNumber(arr) {
 	const numberFrequency = {};
 
-	arr.forEach(num => {
+	arr.forEach((num) => {
 		numberFrequency[num] = (numberFrequency[num] || 0) + 1;
 	});
 
-
 	for (let num in numberFrequency) {
 		if (numberFrequency[num] === 1) {
-			return Number(num); 
+			return Number(num);
 		}
 	}
 
-	return null; 
+	return null;
 }
 
 console.log(singleNumber([4, 2, 1, 2, 1]));
