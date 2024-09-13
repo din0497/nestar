@@ -2,7 +2,7 @@ import { ObjectId } from 'bson';
 import { v4 as uuidv4 } from 'uuid';
 import * as path from 'path';
 import { T } from './types/common';
-import { pipeline } from 'stream';
+
 
 export const availableAgentSorts = ['createdAt', 'updatedAt', 'memberLikes', 'memberViews', 'memberRank'];
 export const availableMembersSorts = ['createdAt', 'updatedAt', 'memberLikes', 'memberViews'];
@@ -73,8 +73,8 @@ export const lookupAuthMemberFollowed = (input: LookupAuthMemberFollowed) => {
 		$lookup: {
 			from: 'follows',
 			let: {
-				localFollowerId: followerId,
-				localFollowingId: followingId,
+				localFollowerId: followerId,//Din
+				localFollowingId: followingId,//Max
 				localMyFavorite: true,
 			},
 			pipeline: [
