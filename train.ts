@@ -9,14 +9,12 @@ MASALAN: firstUniqueCharIndex(“stamp”) return 0
 
 import { log } from 'console';
 
-
 function firstUniqueCharIndex(str) {
 	const charCount = {};
 
 	for (let char of str) {
 		charCount[char] = (charCount[char] || 0) + 1;
 	}
-
 
 	for (let i = 0; i < str.length; i++) {
 		if (charCount[str[i]] === 1) {
@@ -27,5 +25,4 @@ function firstUniqueCharIndex(str) {
 	return -1;
 }
 
-
-log(firstUniqueCharIndex('stamp'))
+log(firstUniqueCharIndex('stamp'));

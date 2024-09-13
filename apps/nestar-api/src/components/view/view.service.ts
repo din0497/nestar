@@ -27,10 +27,7 @@ export class ViewService {
 		return await this.viewModel.findOne(search).exec();
 	}
 
-	public async getVisitedProperties(
-		memberId: ObjectId,
-		input: OrdinaryInquiry,
-	): Promise<Properties> {
+	public async getVisitedProperties(memberId: ObjectId, input: OrdinaryInquiry): Promise<Properties> {
 		const { page, limit } = input;
 		const match: T = { viewGroup: ViewGroup.PROPERTY, memberId: memberId };
 		const data: T = await this.viewModel
@@ -39,31 +36,31 @@ export class ViewService {
 				{ $sort: { updateAt: -1 } },
 				{
 					$lookup: {
-						from: "properties",
-						localField: "viewRefId",
-						foreignField: "_id",
-						as: "visitedProperty",
+						from: 'properties',
+						localField: 'viewRefId',
+						foreignField: '_id',
+						as: 'visitedProperty',
 					},
 				},
-				{ $unwind: "$visitedProperty" },
+				{ $unwind: '$visitedProperty' },
 				{
 					$facet: {
 						list: [
 							{ $skip: (page - 1) * limit },
 							{ $limit: limit },
 							lookupVisit,
-							{ $unwind: "$visitedProperty.memberData" },
+							{ $unwind: '$visitedProperty.memberData' },
 						],
-						metaCounter: [{ $count: "total" }],
+						metaCounter: [{ $count: 'total' }],
 					},
 				},
 			])
 			.exec();
-		console.log("data", data);
+		console.log('data', data);
 		const result: Properties = { list: [], metaCounter: data[0].metaCounter };
 		result.list = data[0].list.map((ele) => ele.visitedProperty);
 
-		console.log("result:", result);
+		console.log('result:', result);
 		return result;
 	}
 }

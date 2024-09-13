@@ -128,17 +128,12 @@ export class MemberService {
 
 		if (text) match.memberNick = { $regex: new RegExp(text, 'i') };
 
-
 		const result = await this.memberModel.aggregate([
 			{ $match: match },
 			{ $sort: sort },
 			{
 				$facet: {
-					list: [
-						{ $skip: (input.page - 1) * input.limit },
-						{ $limit: input.limit },
-						lookupAuthMemberLiked(memberId),
-					],
+					list: [{ $skip: (input.page - 1) * input.limit }, { $limit: input.limit }, lookupAuthMemberLiked(memberId)],
 					metaCounter: [{ $count: 'total' }],
 				},
 			},

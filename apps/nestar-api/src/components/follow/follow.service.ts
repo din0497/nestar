@@ -100,8 +100,8 @@ export class FollowService {
 							{ $limit: limit },
 							lookupAuthMemberLiked(memberId, '$followingId'),
 							lookupAuthMemberFollowed({
-								followerId: memberId,//Din
-								followingId: '$followingId',// Max
+								followerId: memberId, //Din
+								followingId: '$followingId', // Max
 							}),
 							lookupFollowingData,
 							{ $unwind: '$followingData' },

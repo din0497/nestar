@@ -116,7 +116,6 @@ export class PropertyService {
 		return await this.viewService.getVisitedProperties(memberId, input);
 	}
 
-
 	public async getProperties(memberId: ObjectId, input: PropertiesInquiry): Promise<Properties> {
 		const match: T = { propertyStatus: PropertyStatus.ACTIVE };
 		const sort: T = {
