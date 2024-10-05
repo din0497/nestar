@@ -11,7 +11,7 @@ import { WithoutGuard } from '../auth/guards/without.guard';
 
 @Resolver()
 export class FollowResolver {
-	constructor(private readonly followService: FollowService) {}
+	constructor(private readonly followService: FollowService) { }
 
 	@UseGuards(AuthGuard)
 	@Mutation((returns) => Follower)
@@ -50,6 +50,8 @@ export class FollowResolver {
 		console.log('Mutation: getMemberFollowers');
 		const { followingId } = input.search;
 		input.search.followingId = shapeIntoMongoObjId(followingId);
+		console.log("mId", memberId, 'userId', input);
+
 		return await this.followService.getMemberFollowers(memberId, input);
 	}
 }

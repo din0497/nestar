@@ -19,7 +19,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 
 @Resolver()
 export class BoardArticleResolver {
-	constructor(private readonly boardArticleService: BoardArticleService) {}
+	constructor(private readonly boardArticleService: BoardArticleService) { }
 
 	@UseGuards(AuthGuard)
 	@Mutation((returns) => BoardArticle)
@@ -38,6 +38,7 @@ export class BoardArticleResolver {
 		@AuthMember('_id') memberId: ObjectId,
 	): Promise<BoardArticle> {
 		console.log('Mutation: getBoardArticle');
+		
 		const articleId = shapeIntoMongoObjId(input);
 		return await this.boardArticleService.getBoardArticle(memberId, articleId);
 	}

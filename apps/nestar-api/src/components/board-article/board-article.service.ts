@@ -48,15 +48,13 @@ export class BoardArticleService {
 	}
 
 	public async getBoardArticle(memberId: ObjectId, articleId: ObjectId): Promise<BoardArticle> {
-		console.log('@@art', articleId);
-
+		
 		const search: T = {
 			_id: articleId,
 			articleStatus: BoardArticleStatus.ACTIVE,
 		};
 
 		const targetBoardArticle: BoardArticle = await this.boardArticleModel.findOne(search).lean().exec();
-
 		if (!targetBoardArticle) {
 			throw new InternalServerErrorException(Message.NO_DATA_FOUND);
 		}
@@ -75,9 +73,10 @@ export class BoardArticleService {
 			}
 		}
 		const likeInput = { memberId: memberId, likeRefId: articleId, likeGroup: LikeGroup.ARTICLE };
-
+		
+		
 		targetBoardArticle.meLiked = await this.likeService.checkLikeExistence(likeInput);
-
+		/* console.log('###', targetBoardArticle); */
 		targetBoardArticle.memberData = await this.memberService.getMember(null, targetBoardArticle.memberId);
 		return targetBoardArticle;
 	}

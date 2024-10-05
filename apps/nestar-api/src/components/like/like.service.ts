@@ -12,7 +12,7 @@ import { lookupFavorite } from '../../libs/config';
 
 @Injectable()
 export class LikeService {
-	constructor(@InjectModel('Like') private readonly likeModel: Model<Like>) {}
+	constructor(@InjectModel('Like') private readonly likeModel: Model<Like>) { }
 
 	public async toggleLike(input: LikeInput): Promise<number> {
 		const search: T = { memberId: input.memberId, likeRefId: input.likeRefId },
@@ -36,9 +36,8 @@ export class LikeService {
 
 	public async checkLikeExistence(input: LikeInput): Promise<MeLiked[]> {
 		const { memberId, likeRefId } = input;
-		console.log(input);
-
-		const result = await this.likeModel.findOne({ memberId: memberId, likeRefId: likeRefId }).exec();
+		const result = await this.likeModel.findOne({ memberId: memberId, likeRefId: likeRefId }, { new: true }).exec();
+	
 		return result ? [{ memberId: memberId, likeRefId: likeRefId, myFavorite: true }] : [];
 	}
 

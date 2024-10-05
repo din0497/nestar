@@ -119,8 +119,9 @@ export class FollowService {
 	public async getMemberFollowers(memberId: ObjectId, input: FollowInquiry): Promise<Followers> {
 		const { page, limit, search } = input;
 		if (!search?.followingId) throw new InternalServerErrorException(Message.BAD_REQUEST);
+
 		const match: T = { followingId: search?.followingId };
-		console.log('Match:', match);
+		console.log('match:', match);
 
 		const result = await this.followModel
 			.aggregate([
@@ -131,7 +132,9 @@ export class FollowService {
 						list: [
 							{ $skip: (page - 1) * limit },
 							{ $limit: limit },
+							// meLiked
 							lookupAuthMemberLiked(memberId, '$followerId'),
+							// meFollowed
 							lookupAuthMemberFollowed({
 								followerId: memberId,
 								followingId: '$followerId',
