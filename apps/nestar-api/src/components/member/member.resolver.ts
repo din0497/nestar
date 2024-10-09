@@ -92,6 +92,8 @@ export class MemberResolver {
 	@UseGuards(RolesGuard)
 	@Query(() => Members)
 	public async getAllMembersByAdmin(@Args('input') input: MembersInquiry): Promise<Members> {
+		console.log("@@@", input);
+		
 		return await this.memberService.getAllMembersByAdmin(input);
 	}
 
