@@ -1,24 +1,31 @@
 /* 
-ZQ-TASK:
+ZU-TASK:
 
-Shunday function yozing, u parametridagi array ichida 2 marta qaytarilgan sonlarni alohida araryda qaytarsin.
-MASALAN: findDuplicates([1,2,3,4,5,4,3,4]) return [3, 4]
+Shunday function yozing, u parametridagi array ichida takrorlanmagan raqamlar yig'indisini qaytarsin.
+MASALAN: sumOfUnique([1,2,3,2]) return 4
+
+
 
 
 */
 
 import { log } from 'console';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const sumOfUnique = (arr) => {
+	const obj = {};
+	let result = 0;
 
-const findDuplicates = (arr: number[]) => {
-	const result = []
 	for (const num of arr) {
-		if (arr.filter(ele => ele === num).length > 1 && !result.includes(num)) {
-			result.push(num)
+		if (!obj[num]) {
+			obj[num] = 1;
+			result += num; 
+		} else if (obj[num] === 1) {
+			obj[num]++;
+			result -= num;  
 		}
 	}
-	return result
-}
 
-log(findDuplicates([1, 2, 3, 4, 5, 4, 3, 4]))
+	return result;
+};
+
+console.log(sumOfUnique([1, 2, 3, 2]));
